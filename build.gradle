@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.6-SNAPSHOT" apply false
     id 'com.matthewprenger.cursegradle' version '1.+'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -19,7 +19,7 @@ subprojects {
     }
 
     repositories {
-        maven { url "https://maven.pkom.ml/" }
+        maven { url "https://maven.pitan76.net/" }
     }
 
     dependencies {
@@ -40,7 +40,7 @@ subprojects {
                 apiKey = System.getenv("CURSEFORGE_TOKEN")
                 project {
                     id = '519836'
-                    changelog = 'Support 1.20'
+                    changelog = 'Support 1.21'
                     if (modLoader == "fabric") {
                         releaseType = 'release'
                         addGameVersion "Fabric"
@@ -49,8 +49,6 @@ subprojects {
                         releaseType = 'beta'
                         addGameVersion "Forge"
                     }
-                    addGameVersion '1.17'
-                    addGameVersion '1.17.1'
                     addGameVersion '1.18'
                     addGameVersion '1.18.1'
                     addGameVersion '1.18.2'
@@ -59,6 +57,11 @@ subprojects {
                     addGameVersion '1.19.2'
                     addGameVersion '1.19.3'
                     addGameVersion '1.20'
+                    addGameVersion '1.20.1'
+                    addGameVersion '1.20.3'
+                    addGameVersion '1.20.4'
+                    addGameVersion '1.20.6'
+                    addGameVersion '1.21'
                     relations {
                         if (modLoader == "fabric") {
                             requiredDependency "fabric-api"
@@ -80,10 +83,10 @@ subprojects {
                 token = System.getenv("MODRINTH_TOKEN")
                 projectId = 'dRsm10gb'
                 versionNumber = project.mod_version + "-" + modLoader
-                gameVersions = ['1.17', '1.17.1', '1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.20']
+                gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.20', '1.20.1', '1.20.3', '1.20.4', '1.20.6', '1.21']
                 versionType = 'release'
                 uploadFile = tasks.remapJar
-                changelog = 'Support 1.20'
+                changelog = 'Support 1.21'
                 loaders = [modLoader]
                 dependencies {
                     if (modLoader == "fabric") {
