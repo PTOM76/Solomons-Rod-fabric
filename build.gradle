@@ -1,6 +1,6 @@
 plugins {
     id "architectury-plugin" version "3.4-SNAPSHOT"
-    id "dev.architectury.loom" version "0.12.0-SNAPSHOT" apply false
+    id "dev.architectury.loom" version "1.5-SNAPSHOT" apply false
     id 'com.matthewprenger.cursegradle' version '1.+'
     id "com.modrinth.minotaur" version "2.+"
 }
@@ -19,7 +19,7 @@ subprojects {
     }
 
     repositories {
-        maven { url "https://maven.pkom.ml/" }
+        maven { url "https://maven.pitan76.net/" }
     }
 
     dependencies {
@@ -27,9 +27,9 @@ subprojects {
         // The following line declares the mojmap mappings, you may use other mappings as well
         //mappings loom.officialMojangMappings()
         // The following line declares the yarn mappings you may select this one as well.
-        mappings "net.fabricmc:yarn:1.20+build.1:v2"
+        mappings "net.fabricmc:yarn:1.20.1+build.10:v2"
 
-        modApi "ml.pkom:mcpitanlibarch-common${rootProject.mcpitanlib_version}"
+        modApi "net.pitan76:mcpitanlib-common${rootProject.mcpitanlib_version}"
     }
 
     if (name in "fabric,forge".split(",")) {
@@ -40,7 +40,7 @@ subprojects {
                 apiKey = System.getenv("CURSEFORGE_TOKEN")
                 project {
                     id = '519836'
-                    changelog = 'Support 1.20'
+                    changelog = ''
                     if (modLoader == "fabric") {
                         releaseType = 'release'
                         addGameVersion "Fabric"
@@ -49,16 +49,16 @@ subprojects {
                         releaseType = 'beta'
                         addGameVersion "Forge"
                     }
-                    addGameVersion '1.17'
-                    addGameVersion '1.17.1'
                     addGameVersion '1.18'
                     addGameVersion '1.18.1'
                     addGameVersion '1.18.2'
                     addGameVersion '1.19'
                     addGameVersion '1.19.1'
                     addGameVersion '1.19.2'
-                    addGameVersion '1.19.3'
                     addGameVersion '1.20'
+                    addGameVersion '1.20.1'
+                    addGameVersion '1.20.3'
+                    addGameVersion '1.20.4'
                     relations {
                         if (modLoader == "fabric") {
                             requiredDependency "fabric-api"
@@ -80,16 +80,16 @@ subprojects {
                 token = System.getenv("MODRINTH_TOKEN")
                 projectId = 'dRsm10gb'
                 versionNumber = project.mod_version + "-" + modLoader
-                gameVersions = ['1.17', '1.17.1', '1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.19.3', '1.20']
+                gameVersions = ['1.18', '1.18.1', '1.18.2', '1.19', '1.19.1', '1.19.2', '1.20', '1.20.1', '1.20.3', '1.20.4']
                 versionType = 'release'
                 uploadFile = tasks.remapJar
-                changelog = 'Support 1.20'
+                changelog = ''
                 loaders = [modLoader]
                 dependencies {
                     if (modLoader == "fabric") {
                         required.project "P7dR8mSH" // Fabric API
                     }
-                    required.project "uNRoUnGT" // MCPitanLibarch
+                    required.project "uNRoUnGT" // mcpitanlib
                 }
             }
         }

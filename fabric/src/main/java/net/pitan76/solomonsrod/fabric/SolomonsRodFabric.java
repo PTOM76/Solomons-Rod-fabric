@@ -1,6 +1,6 @@
-package ml.pkom.solomonsrod.fabric;
+package net.pitan76.solomonsrod.fabric;
 
-import ml.pkom.solomonsrod.SolomonsRod;
+import net.pitan76.solomonsrod.SolomonsRod;
 import net.fabricmc.api.ModInitializer;
 
 public class SolomonsRodFabric implements ModInitializer {

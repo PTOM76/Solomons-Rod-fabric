@@ -1,4 +1,4 @@
-package ml.pkom.solomonsrod;
+package net.pitan76.solomonsrod;
 
 import dev.architectury.injectables.annotations.ExpectPlatform;
 import dev.architectury.platform.Platform;

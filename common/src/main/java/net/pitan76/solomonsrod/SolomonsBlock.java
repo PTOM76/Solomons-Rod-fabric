@@ -1,11 +1,11 @@
-package ml.pkom.solomonsrod;
+package net.pitan76.solomonsrod;
 
-import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
-import ml.pkom.mcpitanlibarch.api.block.CompatibleMaterial;
-import ml.pkom.mcpitanlibarch.api.block.ExtendBlock;
-import ml.pkom.mcpitanlibarch.api.event.block.BlockScheduledTickEvent;
-import ml.pkom.mcpitanlibarch.api.util.WorldUtil;
-import ml.pkom.mcpitanlibarch.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
+import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
+import net.pitan76.mcpitanlib.api.block.ExtendBlock;
+import net.pitan76.mcpitanlib.api.event.block.BlockScheduledTickEvent;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.ShapeContext;

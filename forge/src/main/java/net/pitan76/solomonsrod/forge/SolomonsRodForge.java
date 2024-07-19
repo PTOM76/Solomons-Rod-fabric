@@ -1,7 +1,7 @@
-package ml.pkom.solomonsrod.forge;
+package net.pitan76.solomonsrod.forge;
 
 import dev.architectury.platform.forge.EventBuses;
-import ml.pkom.solomonsrod.SolomonsRod;
+import net.pitan76.solomonsrod.SolomonsRod;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 

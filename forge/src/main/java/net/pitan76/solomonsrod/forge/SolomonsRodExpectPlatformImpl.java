@@ -1,7 +1,7 @@
-package ml.pkom.solomonsrod.fabric;
+package net.pitan76.solomonsrod.forge;
 
-import ml.pkom.solomonsrod.SolomonsRodExpectPlatform;
-import net.fabricmc.loader.api.FabricLoader;
+import net.pitan76.solomonsrod.SolomonsRodExpectPlatform;
+import net.minecraftforge.fml.loading.FMLPaths;
 
 import java.nio.file.Path;
 
@@ -10,6 +10,6 @@ public class SolomonsRodExpectPlatformImpl {
      * This is our actual method to {@link SolomonsRodExpectPlatform#getConfigDirectory()}.
      */
     public static Path getConfigDirectory() {
-        return FabricLoader.getInstance().getConfigDir();
+        return FMLPaths.CONFIGDIR.get();
     }
 }

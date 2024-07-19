@@ -19,16 +19,12 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ml.pkom.solomonsrod.fabric.SolomonsRodFabric"
+      "net.pitan76.solomonsrod.fabric.SolomonsRodFabric"
     ]
   },
   "depends": {
     "fabricloader": "*",
     "minecraft": "*",
-    "architectury": "*",
-    "mcpitanlibarch": ">1.5.2"
-  },
-  "suggests": {
-    "flamingo": "*"
+    "mcpitanlib": ">2.0.0"
   }
 }
