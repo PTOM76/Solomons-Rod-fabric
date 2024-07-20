@@ -5,6 +5,8 @@ import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
 import net.pitan76.mcpitanlib.api.item.ExtendItem;
+import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
+import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
@@ -25,8 +27,8 @@ public class SolomonsWand extends ExtendItem {
 
     public void deleteBlock(World world, PlayerEntity user, BlockPos pos) {
         if (!world.isClient()) {
-            world.removeBlock(pos, false);
-            world.playSound(null, user.getBlockPos(), Sounds.ERASE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            WorldUtil.removeBlock(world, pos, false);
+            WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.ERASE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
         }
     }
 
@@ -34,26 +36,26 @@ public class SolomonsWand extends ExtendItem {
     public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         World world = e.world;
         BlockPos blockPos = PosUtil.flooredBlockPos(e.hit.getPos());
-        if (!e.world.isClient()) {
-            if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) {
-                if (world.getBlockEntity(blockPos) == null) {
-                    world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
-                    world.playSound(null, blockPos, Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+        if (!e.isClient()) {
+            if (world.canSetBlock(blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock())) {
+                if (WorldUtil.getBlockEntity(world, blockPos) == null) {
+                    WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
+                    WorldUtil.playSound(world, null, blockPos, Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                     return ActionResult.SUCCESS;
                 }
-                world.playSound(null, e.player.getPlayerEntity().getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+                WorldUtil.playSound(world, null, e.player.getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                 return ActionResult.SUCCESS;
             }
             return super.onRightClickOnBlock(e);
         }
-        if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock())) return ActionResult.SUCCESS;
+        if (world.canSetBlock(blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock())) return ActionResult.SUCCESS;
         return super.onRightClickOnBlock(e);
     }
 
     @Override
     public TypedActionResult<ItemStack> onRightClick(ItemUseEvent e) {
         World world = e.world;
-        if (!world.isClient()) {
+        if (!e.isClient()) {
             PlayerEntity user = e.user.getPlayerEntity();
             double posX = user.getX();
             double posY = user.getY();
@@ -90,9 +92,9 @@ public class SolomonsWand extends ExtendItem {
 
             BlockPos blockPos = PosUtil.flooredBlockPos(posX, posY, posZ);
             //if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
-            if (world.canSetBlock(blockPos) && canPlace(world.getBlockState(blockPos).getBlock()) && world.getBlockEntity(blockPos) == null) {
-                world.setBlockState(blockPos, SolomonsBlock.SOLOMONS_BLOCK.getDefaultState());
-                world.playSound(null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            if (world.canSetBlock(blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()) && WorldUtil.getBlockEntity(world, blockPos) == null) {
+                WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
+                WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                 return TypedActionResult.success(user.getStackInHand(e.hand));
             }
         }
