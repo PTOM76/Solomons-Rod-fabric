@@ -10,11 +10,12 @@ public class Sounds {
     public static final RegistryResult<SoundEvent> ERASE_SOUND = register("erase");
     public static final RegistryResult<SoundEvent> BAM_SOUND = register("bam");
     public static final RegistryResult<SoundEvent> NOCRASH_SOUND = register("nocrash");
-    public static void init(){
+
+    public static void init() {
 
     }
 
     private static RegistryResult<SoundEvent> register(String id) {
-        return SolomonsRod.registry.registerSoundEvent(SolomonsRod.id(id));
+        return SolomonsRod.INSTANCE.registry.registerSoundEvent(SolomonsRod.INSTANCE.compatId(id));
     }
 }

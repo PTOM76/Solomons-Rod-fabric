@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
+import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
 import net.pitan76.mcpitanlib.api.event.block.BlockScheduledTickEvent;
 import net.pitan76.mcpitanlib.api.event.block.CollisionShapeEvent;
@@ -87,13 +88,16 @@ public class SolomonsBlock extends ExtendBlock {
     }
 
     @Override
-    public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity player) {
+    public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity playerEntity) {
         if (world.isClient()) return;
+
+        Player player = new Player(playerEntity);
+
         if (player.getMainHandStack() != null)
             if (player.getMainHandStack().getItem() instanceof SolomonsWand || player.getMainHandStack().getItem() instanceof DemonsWand) {
                 SolomonsWand wand = (SolomonsWand) player.getMainHandStack().getItem();
                 wand.deleteBlock(world, player, pos);
             }
-        super.onBlockBreakStart(state, world, pos, player);
+        super.onBlockBreakStart(state, world, pos, player.getEntity());
     }
 }

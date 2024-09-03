@@ -6,6 +6,6 @@ import net.fabricmc.api.ModInitializer;
 public class SolomonsRodFabric implements ModInitializer {
     @Override
     public void onInitialize() {
-        SolomonsRod.init();
+        new SolomonsRod();
     }
 }

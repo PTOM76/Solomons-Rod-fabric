@@ -10,6 +10,6 @@ public class SolomonsRodForge {
     public SolomonsRodForge() {
         // Submit our event bus to let architectury register our content on the right time
         EventBuses.registerModEventBus(SolomonsRod.MOD_ID, FMLJavaModLoadingContext.get().getModEventBus());
-        SolomonsRod.init();
+        new SolomonsRod();
     }
 }
