@@ -40,12 +40,14 @@ public class SolomonsWand extends ExtendItem {
         BlockPos blockPos = PosUtil.flooredBlockPos(e.hit.getPos());
 
         if (e.isClient()) {
-            if (world.canSetBlock(blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock())) return ActionResult.SUCCESS;
+            if (WorldUtil.canSetBlock(world, blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()))
+                return ActionResult.SUCCESS;
+
             return super.onRightClickOnBlock(e);
         }
 
         // ブロックを設置できない場合はそのまま終了
-        if (!world.canSetBlock(blockPos) || !canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()))
+        if (!WorldUtil.canSetBlock(world, blockPos) || !canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()))
             return super.onRightClickOnBlock(e);
 
         // ブロックエンティティが存在する場合はそのまま音を鳴らして終了
@@ -61,19 +63,19 @@ public class SolomonsWand extends ExtendItem {
 
     @Override
     public TypedActionResult<ItemStack> onRightClick(ItemUseEvent e) {
+        if (e.isClient()) super.onRightClick(e);
+
         World world = e.world;
-        if (!e.isClient()) {
-            Player user = e.user;
+        Player user = e.user;
 
-            Vec3d pos = user.getPos();
-            BlockPos blockPos = getPlacingPos(e, pos, user);
+        Vec3d pos = user.getPos();
+        BlockPos blockPos = getPlacingPos(e, pos, user);
 
-            //if (world.canSetBlock(blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
-            if (world.canSetBlock(blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()) && WorldUtil.getBlockEntity(world, blockPos) == null) {
-                WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
-                WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
-                return TypedActionResult.success(user.getStackInHand(e.hand));
-            }
+        //if (WorldUtil.canSetBlock(world, blockPos) && world.getBlockState(blockPos).isAir() && world.getBlockEntity(blockPos) == null) {
+        if (WorldUtil.canSetBlock(world, blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()) && WorldUtil.getBlockEntity(world, blockPos) == null) {
+            WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
+            WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            return TypedActionResult.success(user.getStackInHand(e.hand));
         }
         return super.onRightClick(e);
     }
@@ -113,8 +115,7 @@ public class SolomonsWand extends ExtendItem {
                 posZ += 1;
         }
 
-        BlockPos blockPos = PosUtil.flooredBlockPos(posX, posY, posZ);
-        return blockPos;
+        return PosUtil.flooredBlockPos(posX, posY, posZ);
     }
 
     public static boolean canPlace(Block block) {

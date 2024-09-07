@@ -1,29 +1,24 @@
 package net.pitan76.solomonsrod;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
-import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.World;
 import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.event.block.AppendPropertiesArgs;
-import net.pitan76.mcpitanlib.api.event.block.BlockScheduledTickEvent;
-import net.pitan76.mcpitanlib.api.event.block.CollisionShapeEvent;
-import net.pitan76.mcpitanlib.api.event.block.OutlineShapeEvent;
+import net.pitan76.mcpitanlib.api.event.block.*;
+import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 
 public class SolomonsBlock extends ExtendBlock {
 
-    protected static final VoxelShape SHAPE = Block.createCuboidShape(0.1D, 0.1D, 0.1D, 15.5D, 16.0D, 15.5D);
+    protected static final VoxelShape SHAPE = VoxelShapeUtil.blockCuboid(0.1D, 0.1D, 0.1D, 15.5D, 16.0D, 15.5D);
     public static final BooleanProperty BROKEN = BooleanProperty.of("broken");
     public static final BooleanProperty COOL_DOWN = BooleanProperty.of("cooldown");
 
@@ -46,12 +41,12 @@ public class SolomonsBlock extends ExtendBlock {
     }
 
     @Override
-    public VoxelShape getOutlineShape(OutlineShapeEvent event) {
-        return VoxelShapes.fullCube();
+    public VoxelShape getOutlineShape(OutlineShapeEvent e) {
+        return VoxelShapeUtil.fullCube();
     }
 
     @Override
-    public VoxelShape getCollisionShape(CollisionShapeEvent event) {
+    public VoxelShape getCollisionShape(CollisionShapeEvent e) {
         return SHAPE;
     }
 
@@ -61,43 +56,46 @@ public class SolomonsBlock extends ExtendBlock {
     }
 
     @Override
-    public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
-        if (!world.isClient()) {
-            //System.out.println("pos: " + pos + "entityPos: " + entity.getBlockPos());
-            if (entity.getBlockPos().equals(pos)) {
-                world.playSound(null, entity.getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
-                world.removeBlock(pos, false);
-                return;
+    public void onEntityCollision(EntityCollisionEvent e) {
+        if (e.isClient()) return;
+
+        World world = e.getWorld();
+        BlockPos pos = e.getBlockPos();
+        BlockState state = e.getState();
+
+        //System.out.println("pos: " + pos + "entityPos: " + entity.getBlockPos());
+        if (e.getEntityPos().equals(pos)) {
+            WorldUtil.playSound(e.getWorld(), null, e.getEntityPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            WorldUtil.removeBlock(e.getWorld(), pos, false);
+            return;
+        }
+        if (e.getEntity() instanceof PlayerEntity) {
+            PlayerEntity player = (PlayerEntity) e.getEntity();
+            if (PosUtil.flooredBlockPos(player.getCameraPosVec(1F)).getY() >= pos.getY()) return;
+        }
+        if (!state.get(COOL_DOWN)) {
+            if (state.get(BROKEN)) {
+                WorldUtil.removeBlock(world, pos, false);
+            } else {
+                //world.getBlockTickScheduler().schedule(pos, SOLOMONS_BLOCK, 5);
+                WorldUtil.scheduleBlockTick(world, pos, SOLOMONS_BLOCK, 5);
+                //world.createAndScheduleBlockTick(pos, SOLOMONS_BLOCK, 5);
+                WorldUtil.setBlockState(world, pos, state.with(BROKEN, true).with(COOL_DOWN, true));
             }
-            if (entity instanceof PlayerEntity) {
-                PlayerEntity player = (PlayerEntity) entity;
-                if (PosUtil.flooredBlockPos(player.getCameraPosVec(1F)).getY() >= pos.getY()) return;
-            }
-            if (!state.get(COOL_DOWN)) {
-                if (state.get(BROKEN)) {
-                    world.removeBlock(pos, false);
-                } else {
-                    //world.getBlockTickScheduler().schedule(pos, SOLOMONS_BLOCK, 5);
-                    WorldUtil.scheduleBlockTick(world, pos, SOLOMONS_BLOCK, 5);
-                    //world.createAndScheduleBlockTick(pos, SOLOMONS_BLOCK, 5);
-                    world.setBlockState(pos, state.with(BROKEN, true).with(COOL_DOWN, true));
-                }
-                world.playSound(null, pos, Sounds.CRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
-            }
+            WorldUtil.playSound(world, null, pos, Sounds.CRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
         }
     }
 
     @Override
-    public void onBlockBreakStart(BlockState state, World world, BlockPos pos, PlayerEntity playerEntity) {
-        if (world.isClient()) return;
+    public void onBlockBreakStart(BlockBreakStartEvent e) {
+        if (e.isClient()) return;
 
-        Player player = new Player(playerEntity);
-
+        Player player = e.player;
         if (player.getMainHandStack() != null)
             if (player.getMainHandStack().getItem() instanceof SolomonsWand || player.getMainHandStack().getItem() instanceof DemonsWand) {
                 SolomonsWand wand = (SolomonsWand) player.getMainHandStack().getItem();
-                wand.deleteBlock(world, player, pos);
+                wand.deleteBlock(e.getWorld(), player, e.getPos());
             }
-        super.onBlockBreakStart(state, world, pos, player.getEntity());
+        super.onBlockBreakStart(e);
     }
 }
