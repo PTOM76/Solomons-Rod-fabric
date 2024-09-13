@@ -18,8 +18,6 @@ import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
-import java.util.Optional;
-
 public class DemonsWand extends SolomonsWand {
     public static DemonsWand DEMONS_WAND = of();
 
@@ -31,10 +29,9 @@ public class DemonsWand extends SolomonsWand {
             if (!(attacker instanceof PlayerEntity)) return EventResult.pass();
 
             Player player = new Player((PlayerEntity) attacker);
-            Optional<ItemStack> stackOptional = player.getCurrentHandItem();
-            if (!stackOptional.isPresent()) return EventResult.pass();
-            ItemStack stack = stackOptional.get();
-            
+            ItemStack stack = player.getMainHandStack();
+
+            if (stack == null) return EventResult.pass();
             if (!(stack.getItem() instanceof DemonsWand)) return EventResult.pass();
 
             if (!Config.infiniteDurability && ItemStackUtil.getDamage(stack) >= ItemStackUtil.getMaxDamage(stack))
@@ -44,7 +41,7 @@ public class DemonsWand extends SolomonsWand {
                 WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), Sounds.BAM_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
                 EntityUtil.kill(entity);
 
-                SolomonsWand.damageStackIfDamageable(stack, player, player.getMainHandStack().getItem() == stack.getItem() ? Hand.MAIN_HAND : Hand.OFF_HAND);
+                SolomonsWand.damageStackIfDamageable(stack, player, Hand.MAIN_HAND);
 
                 return EventResult.interruptTrue();
             }
@@ -54,7 +51,7 @@ public class DemonsWand extends SolomonsWand {
     }
 
     public static DemonsWand of() {
-        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("demons_wand"));
+        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.compatId("demons_wand"));
         if (!Config.infiniteDurability) settings.maxDamage(Config.maxDamage);
         else settings.maxCount(1);
 

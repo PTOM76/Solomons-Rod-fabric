@@ -34,7 +34,7 @@ public class SolomonsWand extends ExtendItem {
     }
 
     public static SolomonsWand of() {
-        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("solomon_wand"));
+        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.compatId("solomon_wand"));
         if (!Config.infiniteDurability) settings.maxDamage(Config.maxDamage);
         else settings.maxCount(1);
 

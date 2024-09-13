@@ -13,6 +13,7 @@ import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.*;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
+import net.pitan76.mcpitanlib.api.util.PropertyUtil;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -21,8 +22,8 @@ import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 public class SolomonsBlock extends ExtendBlock {
 
     protected static final VoxelShape SHAPE = VoxelShapeUtil.blockCuboid(0.1D, 0.1D, 0.1D, 15.5D, 16.0D, 15.5D);
-    public static final BooleanProperty BROKEN = BooleanProperty.of("broken");
-    public static final BooleanProperty COOL_DOWN = BooleanProperty.of("cooldown");
+    public static final BooleanProperty BROKEN = PropertyUtil.createBooleanProperty("broken");
+    public static final BooleanProperty COOL_DOWN = PropertyUtil.createBooleanProperty("cooldown");
 
     public static SolomonsBlock SOLOMONS_BLOCK = new SolomonsBlock(CompatibleBlockSettings
             .of(CompatibleMaterial.METAL)
