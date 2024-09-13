@@ -49,7 +49,7 @@ public class SolomonsWand extends ExtendItem {
     @Override
     public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         World world = e.world;
-        BlockPos blockPos = PosUtil.flooredBlockPos(e.hit.getPos());
+        BlockPos blockPos = PosUtil.flooredBlockPos(e.getPos());
 
         // 耐久値が0の場合はそのまま終了
         if (!Config.infiniteDurability && ItemStackUtil.getDamage(e.stack) >= ItemStackUtil.getMaxDamage(e.stack))
