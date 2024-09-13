@@ -106,7 +106,7 @@ public class SolomonsWand extends ExtendItem {
             Optional<ServerPlayerEntity> optionalServerPlayer = player.getServerPlayer();
             if (!optionalServerPlayer.isPresent()) return;
             ServerPlayerEntity serverPlayer = optionalServerPlayer.get();
-            System.out.println("damage");
+            //System.out.println("damage");
 
             ItemStackUtil.damage(stack, 1, serverPlayer);
         }
