@@ -27,18 +27,9 @@ public class Config {
         if (config.configMap == null)
             config.configMap = new LinkedHashMap<>();
 
-        useHighlight = config.getBooleanOrDefault("use_highlight", true);
-        infiniteDurability = config.getBooleanOrDefault("infinite_durability", false);
-        maxDamage = config.getIntOrDefault("max_damage", 192);
-
-        if (!config.has("use_highlight"))
-            config.setBoolean("use_highlight", useHighlight);
-
-        if (!config.has("infinite_durability"))
-            config.setBoolean("infinite_durability", infiniteDurability);
-
-        if (!config.has("max_damage"))
-            config.setInt("max_damage", maxDamage);
+        useHighlight = config.getBooleanOrCreate("use_highlight", true);
+        infiniteDurability = config.getBooleanOrCreate("infinite_durability", false);
+        maxDamage = config.getIntOrCreate("max_damage", 192);
 
         save();
     }

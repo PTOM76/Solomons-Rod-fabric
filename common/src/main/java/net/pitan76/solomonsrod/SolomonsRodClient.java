@@ -8,6 +8,6 @@ public class SolomonsRodClient {
     public static void init() {
         Config.init();
         if (Config.useHighlight)
-            WorldRenderRegistry.registerWorldRenderBeforeBlockOutline(new HighlightRenderer());
+            WorldRenderRegistry.registerWorldRenderAfterLevel(new HighlightRenderer());
     }
 }

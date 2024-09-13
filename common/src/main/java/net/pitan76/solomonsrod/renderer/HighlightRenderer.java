@@ -1,32 +1,36 @@
 package net.pitan76.solomonsrod.renderer;
 
-import net.minecraft.client.MinecraftClient;
+import dev.architectury.event.EventResult;
 import net.minecraft.client.render.Camera;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
-import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineEvent;
-import net.pitan76.mcpitanlib.api.client.event.listener.BeforeBlockOutlineListener;
+import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContext;
+import net.pitan76.mcpitanlib.api.client.event.listener.WorldRenderContextListener;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
+import net.pitan76.mcpitanlib.api.util.client.ClientUtil;
 import net.pitan76.solomonsrod.SolomonsWand;
 
-public class HighlightRenderer implements BeforeBlockOutlineListener {
+import java.util.Optional;
+
+public class HighlightRenderer implements WorldRenderContextListener {
 
     @Override
-    public boolean beforeBlockOutline(BeforeBlockOutlineEvent e) {
-        PlayerEntity player = MinecraftClient.getInstance().player;
-        if (player == null) return true;
+    public void renderer(WorldRenderContext e) {
+        if (ClientUtil.getClient().player == null) return;
+            //|| e.isBlockType()) return;
+        Player player = new Player(ClientUtil.getClient().player);
 
-        if (e.isBlockType()) return true;
 
-        ItemStack stack = player.getMainHandStack();
-        if (stack == null || !(stack.getItem() instanceof SolomonsWand)) return true;
+        Optional<ItemStack> stackOptional = player.getCurrentHandItem();
+        if (!stackOptional.isPresent()) return;
+        ItemStack stack = stackOptional.get();
+
+        if (!(stack.getItem() instanceof SolomonsWand)) return;
 
         Camera camera = e.getCamera();
 
-        BlockPos blockPos = SolomonsWand.getPlacingPos(new Player(player));
+        BlockPos blockPos = SolomonsWand.getPlacingPos(player);
 
         double x = blockPos.getX() - camera.getPos().x;
         double y = blockPos.getY() - camera.getPos().y;
@@ -38,6 +42,5 @@ public class HighlightRenderer implements BeforeBlockOutlineListener {
         e.drawBox(VoxelShapeUtil.getBoundingBox(VoxelShapeUtil.fullCube()), 1f, 1f, 1f, 1f);
 
         e.pop();
-        return true;
     }
 }

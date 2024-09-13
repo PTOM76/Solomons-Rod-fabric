@@ -3,8 +3,7 @@ package net.pitan76.solomonsrod;
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
 import net.minecraft.item.ItemStack;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
@@ -32,16 +31,20 @@ public class DemonsWand extends SolomonsWand {
             if (!(attacker instanceof PlayerEntity)) return EventResult.pass();
 
             Player player = new Player((PlayerEntity) attacker);
-            if (!(player.getMainHandStack().getItem() instanceof DemonsWand)) return EventResult.pass();
+            Optional<ItemStack> stackOptional = player.getCurrentHandItem();
+            if (!stackOptional.isPresent()) return EventResult.pass();
+            ItemStack stack = stackOptional.get();
+            
+            if (!(stack.getItem() instanceof DemonsWand)) return EventResult.pass();
 
-            if (!Config.infiniteDurability && ItemStackUtil.getDamage(player.getMainHandStack()) >= ItemStackUtil.getMaxDamage(player.getMainHandStack()))
+            if (!Config.infiniteDurability && ItemStackUtil.getDamage(stack) >= ItemStackUtil.getMaxDamage(stack))
                 return EventResult.pass();
 
             if (entity instanceof AnimalEntity || entity instanceof SlimeEntity || entity instanceof VillagerEntity || entity instanceof WaterCreatureEntity) {
                 WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), Sounds.BAM_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                 EntityUtil.kill(entity);
 
-                SolomonsWand.damageStackIfDamageable(player.getMainHandStack(), player);
+                SolomonsWand.damageStackIfDamageable(stack, player, player.getMainHandStack().getItem() == stack.getItem() ? Hand.MAIN_HAND : Hand.OFF_HAND);
 
                 return EventResult.interruptTrue();
             }
@@ -51,7 +54,7 @@ public class DemonsWand extends SolomonsWand {
     }
 
     public static DemonsWand of() {
-        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(() -> DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("demons_wand"));
+        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("demons_wand"));
         if (!Config.infiniteDurability) settings.maxDamage(Config.maxDamage);
         else settings.maxCount(1);
 

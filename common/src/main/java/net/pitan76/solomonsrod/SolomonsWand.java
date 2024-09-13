@@ -1,14 +1,17 @@
 package net.pitan76.solomonsrod;
 
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Hand;
 import net.minecraft.util.math.Vec3d;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.item.EnchantableArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
 import net.pitan76.mcpitanlib.api.item.ExtendItem;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
+import net.pitan76.mcpitanlib.api.util.HandUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -31,7 +34,7 @@ public class SolomonsWand extends ExtendItem {
     }
 
     public static SolomonsWand of() {
-        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(() -> DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("solomon_wand"));
+        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("solomon_wand"));
         if (!Config.infiniteDurability) settings.maxDamage(Config.maxDamage);
         else settings.maxCount(1);
 
@@ -72,7 +75,7 @@ public class SolomonsWand extends ExtendItem {
         WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
         WorldUtil.playSound(world, null, blockPos, Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
 
-        damageStackIfDamageable(e.player.getStackInHand(e.hand), e.player);
+        damageStackIfDamageable(e.player.getStackInHand(e.hand), e.player, e.hand);
 
         return ActionResult.SUCCESS;
     }
@@ -94,21 +97,20 @@ public class SolomonsWand extends ExtendItem {
             WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
             WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
 
-            damageStackIfDamageable(user.getStackInHand(e.hand), user);
+            damageStackIfDamageable(user.getStackInHand(e.hand), user, e.hand);
 
             return TypedActionResult.success(user.getStackInHand(e.hand));
         }
         return super.onRightClick(e);
     }
 
-    public static void damageStackIfDamageable(ItemStack stack, Player player) {
+    public static void damageStackIfDamageable(ItemStack stack, Player player, Hand hand) {
         if (!Config.infiniteDurability) {
             Optional<ServerPlayerEntity> optionalServerPlayer = player.getServerPlayer();
             if (!optionalServerPlayer.isPresent()) return;
             ServerPlayerEntity serverPlayer = optionalServerPlayer.get();
-            //System.out.println("damage");
 
-            ItemStackUtil.damage(stack, 1, serverPlayer);
+            ItemStackUtil.damage(stack, 1, serverPlayer, HandUtil.getEquipmentSlot(hand));
         }
     }
 
@@ -162,7 +164,7 @@ public class SolomonsWand extends ExtendItem {
     }
 
     @Override
-    public boolean isEnchantable(ItemStack stack) {
+    public boolean isEnchantable(EnchantableArgs args) {
         return true;
     }
 }
