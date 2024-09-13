@@ -3,7 +3,6 @@ package net.pitan76.solomonsrod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.shape.VoxelShape;
@@ -13,6 +12,7 @@ import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
 import net.pitan76.mcpitanlib.api.block.ExtendBlock;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.block.*;
+import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
@@ -67,7 +67,7 @@ public class SolomonsBlock extends ExtendBlock {
 
         //System.out.println("pos: " + pos + "entityPos: " + entity.getBlockPos());
         if (e.getEntityPos().equals(pos)) {
-            WorldUtil.playSound(e.getWorld(), null, e.getEntityPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            WorldUtil.playSound(e.getWorld(), null, e.getEntityPos(), Sounds.NOCRASH_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
             WorldUtil.removeBlock(e.getWorld(), pos, false);
             return;
         }
@@ -86,7 +86,7 @@ public class SolomonsBlock extends ExtendBlock {
                 //world.createAndScheduleBlockTick(pos, SOLOMONS_BLOCK, 5);
                 WorldUtil.setBlockState(world, pos, state.with(BROKEN, true).with(COOL_DOWN, true));
             }
-            WorldUtil.playSound(world, null, pos, Sounds.CRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            WorldUtil.playSound(world, null, pos, Sounds.CRASH_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
         }
     }
 

@@ -10,6 +10,7 @@ import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
 import net.pitan76.mcpitanlib.api.item.ExtendItem;
+import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
 import net.pitan76.mcpitanlib.api.util.HandUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
@@ -17,7 +18,6 @@ import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.sound.SoundCategory;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
@@ -43,7 +43,7 @@ public class SolomonsWand extends ExtendItem {
 
     public void deleteBlock(World world, Player user, BlockPos pos) {
         WorldUtil.removeBlock(world, pos, false);
-        WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.ERASE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+        WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.ERASE_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
     }
 
     @Override
@@ -68,12 +68,12 @@ public class SolomonsWand extends ExtendItem {
 
         // ブロックエンティティが存在する場合はそのまま音を鳴らして終了
         if (WorldUtil.getBlockEntity(world, blockPos) != null) {
-            WorldUtil.playSound(world, null, e.player.getBlockPos(), Sounds.NOCRASH_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            WorldUtil.playSound(world, null, e.player.getBlockPos(), Sounds.NOCRASH_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
             return ActionResult.SUCCESS;
         }
 
         WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
-        WorldUtil.playSound(world, null, blockPos, Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+        WorldUtil.playSound(world, null, blockPos, Sounds.CREATE_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
 
         damageStackIfDamageable(e.player.getStackInHand(e.hand), e.player, e.hand);
 
@@ -95,7 +95,7 @@ public class SolomonsWand extends ExtendItem {
 
         if (WorldUtil.canSetBlock(world, blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()) && WorldUtil.getBlockEntity(world, blockPos) == null) {
             WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
-            WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.CREATE_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
+            WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.CREATE_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
 
             damageStackIfDamageable(user.getStackInHand(e.hand), user, e.hand);
 
