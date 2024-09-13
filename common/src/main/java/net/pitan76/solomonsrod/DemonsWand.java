@@ -2,6 +2,9 @@ package net.pitan76.solomonsrod;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
+import net.minecraft.item.ItemStack;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.ActionResult;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
@@ -13,10 +16,13 @@ import net.minecraft.entity.passive.VillagerEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
+import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 
+import java.util.Optional;
+
 public class DemonsWand extends SolomonsWand {
-    public static DemonsWand DEMONS_WAND = new DemonsWand(new CompatibleItemSettings().addGroup(() -> DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("demons_wand")).maxCount(1));
+    public static DemonsWand DEMONS_WAND = of();
 
     public DemonsWand(CompatibleItemSettings settings) {
         super(settings);
@@ -28,13 +34,27 @@ public class DemonsWand extends SolomonsWand {
             Player player = new Player((PlayerEntity) attacker);
             if (!(player.getMainHandStack().getItem() instanceof DemonsWand)) return EventResult.pass();
 
+            if (!Config.infiniteDurability && ItemStackUtil.getDamage(player.getMainHandStack()) >= ItemStackUtil.getMaxDamage(player.getMainHandStack()))
+                return EventResult.pass();
+
             if (entity instanceof AnimalEntity || entity instanceof SlimeEntity || entity instanceof VillagerEntity || entity instanceof WaterCreatureEntity) {
                 WorldUtil.playSound(player.getWorld(), null, player.getBlockPos(), Sounds.BAM_SOUND.getOrNull(), SoundCategory.MASTER, 1f, 1f);
                 EntityUtil.kill(entity);
+
+                SolomonsWand.damageStackIfDamageable(player.getMainHandStack(), player);
+
                 return EventResult.interruptTrue();
             }
 
             return EventResult.pass();
         });
+    }
+
+    public static DemonsWand of() {
+        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(() -> DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.id("demons_wand"));
+        if (!Config.infiniteDurability) settings.maxDamage(Config.maxDamage);
+        else settings.maxCount(1);
+
+        return new DemonsWand(settings);
     }
 }

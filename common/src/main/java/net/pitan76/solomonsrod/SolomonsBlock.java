@@ -1,5 +1,6 @@
 package net.pitan76.solomonsrod;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.sound.SoundCategory;
@@ -15,6 +16,7 @@ import net.pitan76.mcpitanlib.api.event.block.*;
 import net.pitan76.mcpitanlib.api.util.VoxelShapeUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
 public class SolomonsBlock extends ExtendBlock {
 
@@ -52,7 +54,7 @@ public class SolomonsBlock extends ExtendBlock {
 
     @Override
     public void scheduledTick(BlockScheduledTickEvent e) {
-        e.world.setBlockState(e.pos, e.state.with(COOL_DOWN, false));
+        WorldUtil.setBlockState(e.world, e.pos, e.state.with(COOL_DOWN, false));
     }
 
     @Override
@@ -69,10 +71,12 @@ public class SolomonsBlock extends ExtendBlock {
             WorldUtil.removeBlock(e.getWorld(), pos, false);
             return;
         }
+
         if (e.getEntity() instanceof PlayerEntity) {
             PlayerEntity player = (PlayerEntity) e.getEntity();
             if (PosUtil.flooredBlockPos(player.getCameraPosVec(1F)).getY() >= pos.getY()) return;
         }
+
         if (!state.get(COOL_DOWN)) {
             if (state.get(BROKEN)) {
                 WorldUtil.removeBlock(world, pos, false);
@@ -88,14 +92,27 @@ public class SolomonsBlock extends ExtendBlock {
 
     @Override
     public void onBlockBreakStart(BlockBreakStartEvent e) {
-        if (e.isClient()) return;
+        if (e.isClient()) {
+            super.onBlockBreakStart(e);
+            return;
+        }
 
         Player player = e.player;
-        if (player.getMainHandStack() != null)
-            if (player.getMainHandStack().getItem() instanceof SolomonsWand || player.getMainHandStack().getItem() instanceof DemonsWand) {
-                SolomonsWand wand = (SolomonsWand) player.getMainHandStack().getItem();
-                wand.deleteBlock(e.getWorld(), player, e.getPos());
-            }
+        if (player.getMainHandStack() == null) {
+            super.onBlockBreakStart(e);
+            return;
+        }
+
+        if (player.getMainHandStack().getItem() instanceof SolomonsWand || player.getMainHandStack().getItem() instanceof DemonsWand) {
+            SolomonsWand wand = (SolomonsWand) player.getMainHandStack().getItem();
+            wand.deleteBlock(e.getWorld(), player, e.getPos());
+        }
+
         super.onBlockBreakStart(e);
+    }
+
+    @Override
+    public CompatMapCodec<? extends Block> getCompatCodec() {
+        return CompatMapCodec.createCodecOfExtendBlock(SolomonsBlock::new);
     }
 }

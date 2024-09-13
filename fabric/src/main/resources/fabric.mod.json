@@ -20,6 +20,9 @@
   "entrypoints": {
     "main": [
       "net.pitan76.solomonsrod.fabric.SolomonsRodFabric"
+    ],
+    "client": [
+      "net.pitan76.solomonsrod.fabric.SolomonsRodClientFabric"
     ]
   },
   "depends": {

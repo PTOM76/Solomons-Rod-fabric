@@ -23,15 +23,16 @@ public class SolomonsRod extends CommonModInitializer {
     public void init() {
         INSTANCE = this;
 
+        Config.init();
         Sounds.init();
 
         SOLOMONS_BLOCK = registry.registerBlock(compatId("solomon_block"), () -> SolomonsBlock.SOLOMONS_BLOCK);
         SOLOMONS_BLOCK_2 = registry.registerBlock(compatId("solomon_block2"), () -> BlockUtil.of(CompatibleBlockSettings.of(CompatibleMaterial.METAL).strength(3f, 3f).requiresTool()));
         SOLOMONS_BLOCK_3 = registry.registerBlock(compatId("solomon_block3"), () -> BlockUtil.of(CompatibleBlockSettings.of(CompatibleMaterial.METAL).strength(3f, 3f).requiresTool()));
 
-        registry.registerItem(compatId("solomon_block"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK.get(), new CompatibleItemSettings().addGroup(DefaultItemGroups.MISC, id("solomon_block"))));
-        registry.registerItem(compatId("solomon_block2"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK_2.get(), new CompatibleItemSettings().addGroup(DefaultItemGroups.BUILDING_BLOCKS, id("solomon_block2"))));
-        registry.registerItem(compatId("solomon_block3"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK_3.get(), new CompatibleItemSettings().addGroup(DefaultItemGroups.BUILDING_BLOCKS, id("solomon_block3"))));
+        registry.registerItem(compatId("solomon_block"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK.get(), CompatibleItemSettings.of().addGroup(DefaultItemGroups.MISC, id("solomon_block"))));
+        registry.registerItem(compatId("solomon_block2"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK_2.get(), CompatibleItemSettings.of().addGroup(DefaultItemGroups.BUILDING_BLOCKS, id("solomon_block2"))));
+        registry.registerItem(compatId("solomon_block3"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK_3.get(), CompatibleItemSettings.of().addGroup(DefaultItemGroups.BUILDING_BLOCKS, id("solomon_block3"))));
 
         registry.registerItem(compatId("solomon_wand"), () -> SolomonsWand.SOLOMONS_WAND);
         registry.registerItem(compatId("demons_wand"), () -> DemonsWand.DEMONS_WAND);
