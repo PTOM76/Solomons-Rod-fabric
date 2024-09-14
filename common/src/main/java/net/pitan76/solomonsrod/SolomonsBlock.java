@@ -82,9 +82,7 @@ public class SolomonsBlock extends ExtendBlock {
             if (state.get(BROKEN)) {
                 WorldUtil.removeBlock(world, pos, false);
             } else {
-                //world.getBlockTickScheduler().schedule(pos, SOLOMONS_BLOCK, 5);
                 WorldUtil.scheduleBlockTick(world, pos, SOLOMONS_BLOCK, 5);
-                //world.createAndScheduleBlockTick(pos, SOLOMONS_BLOCK, 5);
                 WorldUtil.setBlockState(world, pos, state.with(BROKEN, true).with(COOL_DOWN, true));
             }
             WorldUtil.playSound(world, null, pos, Sounds.CRASH_SOUND, CompatSoundCategory.MASTER, 1f, 1f);

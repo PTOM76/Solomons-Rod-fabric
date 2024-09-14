@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.LinkedHashMap;
 
 public class Config {
-    public static File configFile = new File(PlatformUtil.getConfigFolder().toFile(), "solomons_rod.json");
+    public static File configFile = new File(PlatformUtil.getConfigFolderAsFile(), "solomons_rod.json");
 
     public static JsonConfig config = new JsonConfig();
     public static boolean initialized = false;
@@ -44,17 +44,5 @@ public class Config {
 
     public static void save() {
         config.save(configFile, true);
-    }
-
-    public static File getConfigFile() {
-        return configFile;
-    }
-
-    public static File getConfigDir() {
-        return configFile.getParentFile();
-    }
-
-    public static void setConfigDir(File configDir) {
-        Config.configFile = new File(configDir, "solomons_rod.json");
     }
 }

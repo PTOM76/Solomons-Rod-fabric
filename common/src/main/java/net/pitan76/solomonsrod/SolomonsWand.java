@@ -52,7 +52,7 @@ public class SolomonsWand extends ExtendItem {
         BlockPos blockPos = PosUtil.flooredBlockPos(e.getPos());
 
         // 耐久値が0の場合はそのまま終了
-        if (!Config.infiniteDurability && ItemStackUtil.getDamage(e.stack) >= ItemStackUtil.getMaxDamage(e.stack))
+        if (!Config.infiniteDurability && ItemStackUtil.isBreak(e.stack))
             return super.onRightClickOnBlock(e);
 
         if (e.isClient()) {
@@ -84,7 +84,7 @@ public class SolomonsWand extends ExtendItem {
     public TypedActionResult<ItemStack> onRightClick(ItemUseEvent e) {
 
         // 耐久値が0の場合はそのまま終了
-        if (!Config.infiniteDurability && ItemStackUtil.getDamage(e.stack) >= ItemStackUtil.getMaxDamage(e.stack))
+        if (!Config.infiniteDurability && ItemStackUtil.isBreak(e.stack))
             return super.onRightClick(e);
 
         if (e.isClient()) super.onRightClick(e);

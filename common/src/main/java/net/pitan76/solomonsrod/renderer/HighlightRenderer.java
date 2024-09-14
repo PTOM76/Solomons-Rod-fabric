@@ -1,6 +1,5 @@
 package net.pitan76.solomonsrod.renderer;
 
-import dev.architectury.event.EventResult;
 import net.minecraft.client.render.Camera;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -16,11 +15,9 @@ import java.util.Optional;
 public class HighlightRenderer implements WorldRenderContextListener {
 
     @Override
-    public void renderer(WorldRenderContext e) {
-        if (ClientUtil.getClient().player == null) return;
-            //|| e.isBlockType()) return;
-        Player player = new Player(ClientUtil.getClient().player);
-
+    public void render(WorldRenderContext e) {
+        if (ClientUtil.getClientPlayer() == null) return;
+        Player player = ClientUtil.getPlayer();
 
         Optional<ItemStack> stackOptional = player.getCurrentHandItem();
         if (!stackOptional.isPresent()) return;

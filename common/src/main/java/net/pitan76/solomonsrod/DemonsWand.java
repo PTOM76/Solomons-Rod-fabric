@@ -1,18 +1,17 @@
 package net.pitan76.solomonsrod;
 
 import dev.architectury.event.EventResult;
-import dev.architectury.event.events.common.EntityEvent;
+import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.event.v0.LivingHurtEventRegistry;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.VillagerEntity;
-import net.minecraft.entity.player.PlayerEntity;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
@@ -24,17 +23,15 @@ public class DemonsWand extends SolomonsWand {
     public DemonsWand(CompatibleItemSettings settings) {
         super(settings);
 
-        EntityEvent.LIVING_HURT.register((entity, damageSource, f) -> {
-            Entity attacker = damageSource.getAttacker();
-            if (!(attacker instanceof PlayerEntity)) return EventResult.pass();
+        LivingHurtEventRegistry.register((e) -> {
+            if (!e.isPlayerAttacker()) return EventResult.pass();
 
-            Player player = new Player((PlayerEntity) attacker);
+            Entity entity = e.getEntity();
+            Player player = e.getPlayerAttacker();
             ItemStack stack = player.getMainHandStack();
 
-            if (stack == null) return EventResult.pass();
-            if (!(stack.getItem() instanceof DemonsWand)) return EventResult.pass();
-
-            if (!Config.infiniteDurability && ItemStackUtil.getDamage(stack) >= ItemStackUtil.getMaxDamage(stack))
+            if (stack == null || !(stack.getItem() instanceof DemonsWand)) return EventResult.pass();
+            if (!Config.infiniteDurability && ItemStackUtil.isBreak(stack))
                 return EventResult.pass();
 
             if (entity instanceof AnimalEntity || entity instanceof SlimeEntity || entity instanceof VillagerEntity || entity instanceof WaterCreatureEntity) {
