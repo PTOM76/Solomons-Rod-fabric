@@ -57,7 +57,7 @@ public class SolomonsWand extends ExtendItem {
 
         if (e.isClient()) {
             if (WorldUtil.canSetBlock(world, blockPos) && canPlace(WorldUtil.getBlockState(world, blockPos).getBlock()))
-                return ActionResult.SUCCESS;
+                return e.success();
 
             return super.onRightClickOnBlock(e);
         }
@@ -69,7 +69,7 @@ public class SolomonsWand extends ExtendItem {
         // ブロックエンティティが存在する場合はそのまま音を鳴らして終了
         if (WorldUtil.getBlockEntity(world, blockPos) != null) {
             WorldUtil.playSound(world, null, e.player.getBlockPos(), Sounds.NOCRASH_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
-            return ActionResult.SUCCESS;
+            return e.success();
         }
 
         WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
@@ -77,7 +77,7 @@ public class SolomonsWand extends ExtendItem {
 
         damageStackIfDamageable(e.player.getStackInHand(e.hand), e.player, e.hand);
 
-        return ActionResult.SUCCESS;
+        return e.success();
     }
 
     @Override

@@ -1,6 +1,5 @@
 package net.pitan76.solomonsrod;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.state.property.BooleanProperty;
@@ -20,6 +19,13 @@ import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.pitan76.mcpitanlib.core.serialization.CompatMapCodec;
 
 public class SolomonsBlock extends ExtendBlock {
+
+    public static final CompatMapCodec<? extends SolomonsBlock> CODEC = CompatMapCodec.createCodecOfExtendBlock(SolomonsBlock::new);
+
+    @Override
+    public CompatMapCodec<? extends SolomonsBlock> getCompatCodec() {
+        return CODEC;
+    }
 
     protected static final VoxelShape SHAPE = VoxelShapeUtil.blockCuboid(0.1D, 0.1D, 0.1D, 15.5D, 16.0D, 15.5D);
     public static final BooleanProperty BROKEN = PropertyUtil.createBooleanProperty("broken");
@@ -108,10 +114,5 @@ public class SolomonsBlock extends ExtendBlock {
         }
 
         super.onBlockBreakStart(e);
-    }
-
-    @Override
-    public CompatMapCodec<? extends Block> getCompatCodec() {
-        return CompatMapCodec.createCodecOfExtendBlock(SolomonsBlock::new);
     }
 }

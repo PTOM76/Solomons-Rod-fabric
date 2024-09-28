@@ -27,7 +27,7 @@ public class Config {
         if (config.configMap == null)
             config.configMap = new LinkedHashMap<>();
 
-        useHighlight = config.getBooleanOrCreate("use_highlight", true);
+        useHighlight = config.getBooleanOrCreate("use_highlight", PlatformUtil.isFabric());
         infiniteDurability = config.getBooleanOrCreate("infinite_durability", false);
         maxDamage = config.getIntOrCreate("max_damage", 192);
 

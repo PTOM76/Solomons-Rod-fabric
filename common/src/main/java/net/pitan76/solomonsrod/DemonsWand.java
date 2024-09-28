@@ -1,11 +1,11 @@
 package net.pitan76.solomonsrod;
 
-import dev.architectury.event.EventResult;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Hand;
 import net.pitan76.mcpitanlib.api.entity.Player;
-import net.pitan76.mcpitanlib.api.event.v0.LivingHurtEventRegistry;
+import net.pitan76.mcpitanlib.api.event.result.EventResult;
+import net.pitan76.mcpitanlib.api.event.v1.LivingHurtEventRegistry;
 import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
 import net.minecraft.entity.mob.SlimeEntity;
@@ -40,7 +40,7 @@ public class DemonsWand extends SolomonsWand {
 
                 SolomonsWand.damageStackIfDamageable(stack, player, Hand.MAIN_HAND);
 
-                return EventResult.interruptTrue();
+                return EventResult.success();
             }
 
             return EventResult.pass();

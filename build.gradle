@@ -59,11 +59,15 @@ subprojects {
                     addGameVersion '1.20.1'
                     addGameVersion '1.20.3'
                     addGameVersion '1.20.4'
+
+                    if (modLoader == "fabric") {
+                        addGameVersion '1.21'
+                        addGameVersion '1.21.1'
+                    }
+
                     relations {
                         if (modLoader == "fabric") {
                             requiredDependency "fabric-api"
-                            addGameVersion '1.21'
-                            addGameVersion '1.21.1'
                         }
                         requiredDependency 'mcpitanlibarch'
                     }
