@@ -1,10 +1,10 @@
-package ml.pkom.solomonsrod;
+package net.pitan76.solomonsrod;
 
 import dev.architectury.event.EventResult;
 import dev.architectury.event.events.common.EntityEvent;
-import ml.pkom.mcpitanlibarch.api.entity.Player;
-import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
-import ml.pkom.mcpitanlibarch.api.item.DefaultItemGroups;
+import net.pitan76.mcpitanlib.api.entity.Player;
+import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;

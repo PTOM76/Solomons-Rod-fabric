@@ -19,7 +19,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "ml.pkom.solomonsrod.fabric.SolomonsRodFabric"
+      "net.pitan76.solomonsrod.fabric.SolomonsRodFabric"
     ]
   },
   "depends": {

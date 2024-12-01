@@ -1,26 +1,27 @@
-package ml.pkom.solomonsrod;
+package net.pitan76.solomonsrod;
 
-import ml.pkom.mcpitanlibarch.api.block.CompatibleBlockSettings;
-import ml.pkom.mcpitanlibarch.api.block.CompatibleMaterial;
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
-import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
-import ml.pkom.mcpitanlibarch.api.item.DefaultItemGroups;
-import ml.pkom.mcpitanlibarch.api.registry.ArchRegistry;
-import ml.pkom.mcpitanlibarch.api.util.BlockUtil;
-import ml.pkom.mcpitanlibarch.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
+import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
+import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
+import net.pitan76.mcpitanlib.api.util.BlockUtil;
+import net.pitan76.mcpitanlib.api.util.ItemUtil;
 import net.minecraft.block.Block;
 import net.minecraft.util.Identifier;
+import net.pitan76.mcpitanlib.api.registry.CompatRegistry;
+import net.pitan76.mcpitanlib.api.util.IdentifierUtil;
+
 public class SolomonsRod {
     public static final String MOD_ID = "solomons_rod";
 
-    public static ArchRegistry registry = ArchRegistry.createRegistry(MOD_ID);
+    public static ArchRegistry registry = CompatRegistry.createRegistry(MOD_ID);
 
     public static RegistryEvent<Block> SOLOMONS_BLOCK;
     public static RegistryEvent<Block> SOLOMONS_BLOCK_2;
     public static RegistryEvent<Block> SOLOMONS_BLOCK_3;
 
     public static Identifier id(String id) {
-        return new Identifier(MOD_ID, id);
+        return IdentifierUtil.id(MOD_ID, id);
     }
 
     public static void init() {

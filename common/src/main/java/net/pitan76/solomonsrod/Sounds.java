@@ -1,6 +1,6 @@
-package ml.pkom.solomonsrod;
+package net.pitan76.solomonsrod;
 
-import ml.pkom.mcpitanlibarch.api.event.registry.RegistryEvent;
+import net.pitan76.mcpitanlib.api.event.registry.RegistryEvent;
 import net.minecraft.sound.SoundEvent;
 
 public class Sounds {

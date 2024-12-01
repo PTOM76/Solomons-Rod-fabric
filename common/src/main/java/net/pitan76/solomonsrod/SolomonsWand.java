@@ -1,11 +1,11 @@
-package ml.pkom.solomonsrod;
+package net.pitan76.solomonsrod;
 
-import ml.pkom.mcpitanlibarch.api.event.item.ItemUseEvent;
-import ml.pkom.mcpitanlibarch.api.event.item.ItemUseOnBlockEvent;
-import ml.pkom.mcpitanlibarch.api.item.CompatibleItemSettings;
-import ml.pkom.mcpitanlibarch.api.item.DefaultItemGroups;
-import ml.pkom.mcpitanlibarch.api.item.ExtendItem;
-import ml.pkom.mcpitanlibarch.api.util.math.PosUtil;
+import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
+import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
+import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
+import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
+import net.pitan76.mcpitanlib.api.item.ExtendItem;
+import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.minecraft.block.*;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
