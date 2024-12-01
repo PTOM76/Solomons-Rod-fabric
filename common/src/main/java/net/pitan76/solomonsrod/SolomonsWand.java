@@ -7,34 +7,31 @@ import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.item.EnchantableArgs;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseEvent;
 import net.pitan76.mcpitanlib.api.event.item.ItemUseOnBlockEvent;
-import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
-import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
-import net.pitan76.mcpitanlib.api.item.ExtendItem;
+import net.pitan76.mcpitanlib.api.item.v2.CompatItem;
+import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
-import net.pitan76.mcpitanlib.api.util.BlockStateUtil;
-import net.pitan76.mcpitanlib.api.util.HandUtil;
-import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
-import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.api.util.*;
 import net.pitan76.mcpitanlib.api.util.math.PosUtil;
 import net.minecraft.block.*;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.TypedActionResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.World;
+import net.pitan76.mcpitanlib.midohra.item.ItemGroups;
 
 import java.util.Optional;
 
-public class SolomonsWand extends ExtendItem {
-    public static SolomonsWand SOLOMONS_WAND = of();
+import static net.pitan76.solomonsrod.SolomonsRod._id;
+
+public class SolomonsWand extends CompatItem {
+    public static SolomonsWand SOLOMONS_WAND = of(_id("solomon_wand"));
 
     public SolomonsWand(CompatibleItemSettings settings) {
         super(settings);
     }
 
-    public static SolomonsWand of() {
-        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.compatId("solomon_wand"));
+    public static SolomonsWand of(CompatIdentifier id) {
+        CompatibleItemSettings settings = CompatibleItemSettings.of(id).addGroup(ItemGroups.TOOLS).enchantable(15);
         if (!Config.infiniteDurability) settings.maxDamage(Config.maxDamage);
         else settings.maxCount(1);
 
@@ -47,7 +44,7 @@ public class SolomonsWand extends ExtendItem {
     }
 
     @Override
-    public ActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
+    public CompatActionResult onRightClickOnBlock(ItemUseOnBlockEvent e) {
         World world = e.world;
         BlockPos blockPos = PosUtil.flooredBlockPos(e.getPos());
 
@@ -81,7 +78,7 @@ public class SolomonsWand extends ExtendItem {
     }
 
     @Override
-    public TypedActionResult<ItemStack> onRightClick(ItemUseEvent e) {
+    public StackActionResult onRightClick(ItemUseEvent e) {
 
         // 耐久値が0の場合はそのまま終了
         if (!Config.infiniteDurability && ItemStackUtil.isBreak(e.stack))
@@ -97,9 +94,9 @@ public class SolomonsWand extends ExtendItem {
             WorldUtil.setBlockState(world, blockPos, BlockStateUtil.getDefaultState(SolomonsBlock.SOLOMONS_BLOCK));
             WorldUtil.playSound(world, null, user.getBlockPos(), Sounds.CREATE_SOUND, CompatSoundCategory.MASTER, 1f, 1f);
 
-            damageStackIfDamageable(user.getStackInHand(e.hand), user, e.hand);
+            damageStackIfDamageable(e.stack, user, e.hand);
 
-            return TypedActionResult.success(user.getStackInHand(e.hand));
+            return e.success();
         }
         return super.onRightClick(e);
     }

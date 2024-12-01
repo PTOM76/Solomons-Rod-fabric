@@ -1,14 +1,15 @@
 package net.pitan76.solomonsrod;
 
 import net.pitan76.mcpitanlib.api.CommonModInitializer;
-import net.pitan76.mcpitanlib.api.block.CompatibleBlockSettings;
+import net.pitan76.mcpitanlib.api.block.v2.CompatibleBlockSettings;
 import net.pitan76.mcpitanlib.api.block.CompatibleMaterial;
-import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
-import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
+import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.pitan76.mcpitanlib.api.registry.result.RegistryResult;
-import net.pitan76.mcpitanlib.api.util.BlockUtil;
-import net.pitan76.mcpitanlib.api.util.ItemUtil;
+import net.pitan76.mcpitanlib.api.util.block.BlockUtil;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
+import net.pitan76.mcpitanlib.api.util.item.ItemUtil;
 import net.minecraft.block.Block;
+import net.pitan76.mcpitanlib.midohra.item.ItemGroups;
 
 public class SolomonsRod extends CommonModInitializer {
     public static final String MOD_ID = "solomons_rod";
@@ -26,16 +27,20 @@ public class SolomonsRod extends CommonModInitializer {
         Config.init();
         Sounds.init();
 
-        SOLOMONS_BLOCK = registry.registerBlock(compatId("solomon_block"), () -> SolomonsBlock.SOLOMONS_BLOCK);
-        SOLOMONS_BLOCK_2 = registry.registerBlock(compatId("solomon_block2"), () -> BlockUtil.of(CompatibleBlockSettings.of(CompatibleMaterial.METAL).strength(3f, 3f).requiresTool()));
-        SOLOMONS_BLOCK_3 = registry.registerBlock(compatId("solomon_block3"), () -> BlockUtil.of(CompatibleBlockSettings.of(CompatibleMaterial.METAL).strength(3f, 3f).requiresTool()));
+        SOLOMONS_BLOCK = registry.registerBlock(_id("solomon_block"), () -> SolomonsBlock.SOLOMONS_BLOCK);
+        SOLOMONS_BLOCK_2 = registry.registerBlock(_id("solomon_block2"), () -> BlockUtil.create(CompatibleBlockSettings.of(_id("solomon_block2"), CompatibleMaterial.METAL).strength(3f, 3f).requiresTool()));
+        SOLOMONS_BLOCK_3 = registry.registerBlock(_id("solomon_block3"), () -> BlockUtil.create(CompatibleBlockSettings.of(_id("solomon_block3"), CompatibleMaterial.METAL).strength(3f, 3f).requiresTool()));
 
-        registry.registerItem(compatId("solomon_block"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK.get(), CompatibleItemSettings.of().addGroup(DefaultItemGroups.MISC, compatId("solomon_block"))));
-        registry.registerItem(compatId("solomon_block2"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK_2.get(), CompatibleItemSettings.of().addGroup(DefaultItemGroups.BUILDING_BLOCKS, compatId("solomon_block2"))));
-        registry.registerItem(compatId("solomon_block3"), () -> ItemUtil.ofBlock(SOLOMONS_BLOCK_3.get(), CompatibleItemSettings.of().addGroup(DefaultItemGroups.BUILDING_BLOCKS, compatId("solomon_block3"))));
+        registry.registerItem(_id("solomon_block"), () -> ItemUtil.create(SOLOMONS_BLOCK.get(), CompatibleItemSettings.of(_id("solomon_block")).addGroup(ItemGroups.MISC)));
+        registry.registerItem(_id("solomon_block2"), () -> ItemUtil.create(SOLOMONS_BLOCK_2.get(), CompatibleItemSettings.of(_id("solomon_block2")).addGroup(ItemGroups.BUILDING_BLOCKS)));
+        registry.registerItem(_id("solomon_block3"), () -> ItemUtil.create(SOLOMONS_BLOCK_3.get(), CompatibleItemSettings.of(_id("solomon_block3")).addGroup(ItemGroups.BUILDING_BLOCKS)));
 
-        registry.registerItem(compatId("solomon_wand"), () -> SolomonsWand.SOLOMONS_WAND);
-        registry.registerItem(compatId("demons_wand"), () -> DemonsWand.DEMONS_WAND);
+        registry.registerItem(_id("solomon_wand"), () -> SolomonsWand.SOLOMONS_WAND);
+        registry.registerItem(_id("demons_wand"), () -> DemonsWand.DEMONS_WAND);
+    }
+    
+    public static CompatIdentifier _id(String path) {
+        return new CompatIdentifier(MOD_ID, path);
     }
 
     @Override

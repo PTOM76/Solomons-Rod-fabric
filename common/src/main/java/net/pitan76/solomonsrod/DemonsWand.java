@@ -6,19 +6,22 @@ import net.minecraft.util.Hand;
 import net.pitan76.mcpitanlib.api.entity.Player;
 import net.pitan76.mcpitanlib.api.event.result.EventResult;
 import net.pitan76.mcpitanlib.api.event.v1.LivingHurtEventRegistry;
-import net.pitan76.mcpitanlib.api.item.CompatibleItemSettings;
-import net.pitan76.mcpitanlib.api.item.DefaultItemGroups;
+import net.pitan76.mcpitanlib.api.item.v2.CompatibleItemSettings;
 import net.minecraft.entity.mob.SlimeEntity;
 import net.minecraft.entity.mob.WaterCreatureEntity;
 import net.minecraft.entity.passive.AnimalEntity;
 import net.minecraft.entity.passive.VillagerEntity;
 import net.pitan76.mcpitanlib.api.sound.CompatSoundCategory;
+import net.pitan76.mcpitanlib.api.util.CompatIdentifier;
 import net.pitan76.mcpitanlib.api.util.EntityUtil;
 import net.pitan76.mcpitanlib.api.util.ItemStackUtil;
 import net.pitan76.mcpitanlib.api.util.WorldUtil;
+import net.pitan76.mcpitanlib.midohra.item.ItemGroups;
+
+import static net.pitan76.solomonsrod.SolomonsRod._id;
 
 public class DemonsWand extends SolomonsWand {
-    public static DemonsWand DEMONS_WAND = of();
+    public static DemonsWand DEMONS_WAND = of(_id("demons_wand"));
 
     public DemonsWand(CompatibleItemSettings settings) {
         super(settings);
@@ -47,8 +50,8 @@ public class DemonsWand extends SolomonsWand {
         });
     }
 
-    public static DemonsWand of() {
-        CompatibleItemSettings settings = CompatibleItemSettings.of().addGroup(DefaultItemGroups.TOOLS, SolomonsRod.INSTANCE.compatId("demons_wand"));
+    public static DemonsWand of(CompatIdentifier id) {
+        CompatibleItemSettings settings = CompatibleItemSettings.of(id).addGroup(ItemGroups.TOOLS).enchantable(15);
         if (!Config.infiniteDurability) settings.maxDamage(Config.maxDamage);
         else settings.maxCount(1);
 
